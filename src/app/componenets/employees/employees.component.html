@@ -1,0 +1,23 @@
+
+<div class="table-div">
+  <a routerLink (click)="addEmployee()">Add Employee</a>
+<table>
+  <thead>
+    <th scope="col">Name</th>
+    <th scope="col">idNumber</th>
+    <th scope="col">Role</th>
+    <th scope="col">Manager</th>
+    <th scope="col">Actions</th>
+  </thead>
+  <tr *ngFor="let emp of employees | async">
+    <td>{{ emp.name }}</td>
+    <td>{{ emp.idNumber }}</td>
+    <td>{{ emp.role?.name }}</td>
+    <td>{{ emp.manager?.name }}</td>
+    <td>
+      <a routerLink (click)="editEmployee(emp.idNumber)">Edit</a> |
+      <a routerLink (click)="deleteEmployee(emp.idNumber)">Delete</a>
+    </td>
+  </tr>
+</table>
+</div>

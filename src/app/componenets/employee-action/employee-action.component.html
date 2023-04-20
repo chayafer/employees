@@ -1,0 +1,30 @@
+
+<div>
+  <ul>
+    <label> ID: </label>
+    <input *ngIf="formMode==1" type="text" [(ngModel)]="EmployeeData.name"/>
+    <label *ngIf="formMode==2"> {{EmployeeData.idNumber}} </label>
+  </ul>
+  <ul>
+    <label>Name</label>
+    <input type="text" [(ngModel)]="EmployeeData.name"/>
+  </ul>
+  <ul>
+    <label>Role</label>
+    <select [(ngModel)]="EmployeeData.role">
+      <option *ngFor="let role of roleList">
+        {{role.name}}
+      </option>
+    </select>
+  </ul>
+  <ul>
+    <label>Manager Name</label>
+    <input type="text" [(ngModel)]="managerName"/>
+  </ul>
+  <ul>
+    <button (click)="Cancel()" >Cancel</button>
+    <button (click)="updateEmployee(EmployeeData)" >{{btnText}}</button>
+  </ul>
+
+</div>
+
