@@ -20,9 +20,8 @@ export class EmployeesComponent {
   ngOnInit() {
     this.sub = this.activatedroute.paramMap.subscribe((params) => {
 
-      let roleId = params.get('roleId');
-
-        this.employees = this.employeeService.getEmployees(roleId);
+      
+        this.employees = this.employeeService.getEmployees();
 
 
       //this.product = products.find((p) => p.productID == this.id);

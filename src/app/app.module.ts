@@ -22,7 +22,6 @@ import { HomeComponent } from './componenets/home/home.component';
 import { EmployeesComponent } from './componenets/employees/employees.component';
 import { MatSidenavModule } from  '@angular/material/sidenav';
 import { HeaderComponent } from './componenets/header/header.component';
-import { FooterComponent } from './componenets/footer/footer.component';
 import { SearchPipe } from './pipe/search.pipe';
 import { EmployeeActionComponent } from './componenets/employee-action/employee-action.component';
 
@@ -33,7 +32,6 @@ import { EmployeeActionComponent } from './componenets/employee-action/employee-
     HomeComponent,
     EmployeesComponent,
     HeaderComponent,
-    FooterComponent,
     SearchPipe,
     EmployeeActionComponent
   ],

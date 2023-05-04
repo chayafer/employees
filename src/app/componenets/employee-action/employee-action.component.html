@@ -2,8 +2,8 @@
 <div>
   <ul>
     <label> ID: </label>
-    <input *ngIf="formMode==1" type="text" [(ngModel)]="EmployeeData.name"/>
-    <label *ngIf="formMode==2"> {{EmployeeData.idNumber}} </label>
+    <input *ngIf="formMode==1" type="text" [(ngModel)]="EmployeeData.idNumber" (ngModelChange)="checkId()"/>
+    <label *ngIf="idErrorMsg"> {{idErrorMsg}} </label>
   </ul>
   <ul>
     <label>Name</label>

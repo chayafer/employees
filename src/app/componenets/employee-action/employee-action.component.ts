@@ -22,6 +22,9 @@ export class EmployeeActionComponent {
   formMode: FormMode = FormMode.Add;
   mode!: FormMode;
   btnText: string = 'Add';
+  Employees!: Employee[];
+  currentEmployee!: Employee;
+  idErrorMsg!: string | null
   constructor(private route: ActivatedRoute, private location: Location, public employeeService: EmployeeService) { }
 
 
@@ -30,9 +33,15 @@ export class EmployeeActionComponent {
     if (empID) {
       this.formMode = FormMode.Edit;
       this.btnText = 'Update';
-      this.sub = this.employeeService.employees$.subscribe((response: Employee[]) => {
-        this.EmployeeData = response.find(emp => emp.idNumber === empID) as Employee;
-      });
+      if (localStorage.getItem('employeesData') != null) {
+        this.Employees = JSON.parse(localStorage.getItem('employeesData') as string);
+      }
+      else {
+        this.sub = this.employeeService.getData().subscribe((response: Employee[]) => {
+          this.Employees = response;
+        });
+      }
+
       this.managerName = this.EmployeeData.manager?.name;
     }
     this.roleList = this.employeeService.getRoles();
@@ -40,15 +49,48 @@ export class EmployeeActionComponent {
 
   }
 
-  updateEmployee(EmpDetails: any) {
-    if (this.formMode == FormMode.Edit) {
-      this.employeeService.editEmployee(EmpDetails);
-    }
-    else {
-      this.employeeService.addEmployee(EmpDetails);
+  checkId(): void {
+
+    if (!this.checkValidId()) {
+      this.idErrorMsg = 'Id number is not valid';
+      return;
     }
 
-    this.location.back();
+    let user = this.getUser()
+    if (!user) {
+      this.idErrorMsg = 'user not found';
+      return;
+    }
+    this.idErrorMsg = null;
+    this.currentEmployee = user;
+
+  }
+  checkValidId(): boolean {
+    {
+      var id = this.currentEmployee.idNumber.trim();
+      if (!id || id.length > 9 || id.length < 5) return false;
+
+      // Pad string with zeros up to 9 digits
+      id = id.length < 9 ? ("00000000" + id).slice(-9) : id;
+
+      return Array
+        .from(id, Number)
+        .reduce((counter, digit, i) => {
+          const step = digit * ((i % 2) + 1);
+          return counter + (step > 9 ? step - 9 : step);
+        }) % 10 === 0;
+
+    }
+  }
+  getUser(): Employee | undefined {
+    return this.Employees.find(emp => emp.idNumber === this.currentEmployee.idNumber);
+
+  }
+
+  updateEmployee(EmpDetails: any) {
+
+      this.employeeService.editEmployee(EmpDetails);
+
   }
 
   Cancel() {
@@ -57,6 +99,8 @@ export class EmployeeActionComponent {
   ngOnDestroy() {
     if (this.sub) this.sub.unsubscribe();
   }
+
+
 }
 
 enum FormMode {

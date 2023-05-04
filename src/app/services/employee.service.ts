@@ -18,23 +18,26 @@ export class EmployeeService {
 
   employees$ = this.employeesSubject.asObservable();
 
+  isDataCalculated!: boolean;
+
   constructor(private http: HttpClient) { }
 
-  getEmployees(roleId: string | null): Observable<Employee[]> {
-    let api = 'Employees';
-    // if (roleId=='2' || roleId=='3') {
-    //   api='Managers';
-    // }
-    // else if (roleId=='4') {
-    //   api='OS';
-    // }
-    this.http.get<Employee[]>(`${this.baseUrl}${api}`).pipe(
-      catchError(this.handleError)).subscribe(newValue => {
-        this.employeesSubject.next(newValue);
-      });;
-    if (roleId) {
-      return this.getfilteredEmployees(roleId);
+  getData(){
+    if(!this.isDataCalculated){
+      this.getEmployees();
+      this.isDataCalculated=true;
     }
+    return this.employees$;
+  }
+
+  getEmployees(): Observable<Employee[]> {
+    let api = 'Employees';
+
+    this.http.get<Employee[]>(`${this.baseUrl}${api}`).pipe().subscribe(newValue => {
+        this.employeesSubject.next(newValue);
+        localStorage.setItem('employeesData',JSON.stringify(newValue));
+      });;
+
     return this.employees$;
   }
 
